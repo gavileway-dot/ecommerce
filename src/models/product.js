@@ -95,6 +95,6 @@ productSchema.index({ category: 1 });
 productSchema.index({ vendor: 1 });
 productSchema.index({ price: 1 });
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
 
 export default Product;

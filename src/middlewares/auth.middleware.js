@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import User from '../models/user.js';
 
 export const protect = async (req, res, next) => {
   let token = req.headers.authorization?.split(' ')[1]; // Looks for token in headers
@@ -10,6 +10,7 @@ export const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password'); // Attach user to request
       next(); // Let them through to the next step
     } catch (e) {
+      console.error(e);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
   } else {

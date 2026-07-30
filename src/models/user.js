@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs'; // Library to scramble (hash) passwords
 
 const userSchema = mongoose.Schema({
+  name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   // RBAC: Defines if the user is a customer, seller, or admin [6]
@@ -9,7 +10,9 @@ const userSchema = mongoose.Schema({
     type: String, 
     enum: ['customer', 'seller', 'admin'], 
     default: 'customer' 
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 }, { timestamps: true }); // Automatically adds "created at" and "updated at"
 
 // SECURITY: Scrambles the password before saving it to the database [5]

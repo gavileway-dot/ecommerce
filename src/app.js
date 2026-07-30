@@ -2,9 +2,13 @@ import express from 'express';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from './config/swagger.js';
+import { globalLimiter } from './middlewares/rateLimiter.middleware.js';
+import { notFound } from './middlewares/notFound.middleware.js';
+import { errorHandler } from './middlewares/error.middleware.js';
 
 // Route imports
 import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
 import productRoutes from './routes/product.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import reviewRoutes from './routes/review.routes.js';
@@ -21,6 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+// Apply global rate limiter
+app.use(globalLimiter);
+
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
@@ -31,6 +38,7 @@ app.get('/', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/reviews', reviewRoutes);
@@ -40,11 +48,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Error handling middleware
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: err.message || 'Server Error' });
-});
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;

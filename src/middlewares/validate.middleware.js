@@ -12,3 +12,5 @@ export const validate = (req, res, next) => {
     errors: extractedErrors,
   });
 };
+
+export default validate;
