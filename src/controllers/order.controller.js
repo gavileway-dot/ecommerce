@@ -8,21 +8,19 @@ import asyncHandler from '../utils/asyncHandler.js';
 // @access  Private
 export const createOrder = asyncHandler(async (req, res) => {
   const { shippingAddress, paymentMethod } = req.body;
-  const userId = req.user ? req.user._id : '64f0b2f9e4b0e5a1b4c9e8d1';
+  const userId = req.user._id;
 
   // Get user's cart
-  const cart = await Cart.findOne({ user: userId });
+  const cart = await Cart.findOne({ user: userId }).populate('items.product');
 
   if (!cart || cart.items.length === 0) {
     return res.status(400).json({ message: 'No items in cart' });
   }
 
-  // To build an order, we need prices. In MVP without full product integration, 
-  // we might assign mock prices if they aren't available, but we'll simulate it:
   const orderItems = cart.items.map((item) => ({
-    product: item.product,
+    product: item.product._id,
     quantity: item.quantity,
-    price: 100, // MOCK PRICE. Real prices will be fetched from the database when fully integrated.
+    price: item.product.price,
   }));
 
   const totalAmount = await calculateOrderTotal(orderItems);
@@ -48,7 +46,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const userId = req.user ? req.user._id : '64f0b2f9e4b0e5a1b4c9e8d1';
+  const userId = req.user._id;
   const orders = await Order.find({ user: userId });
   res.status(200).json(orders);
 });

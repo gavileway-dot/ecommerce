@@ -2,7 +2,7 @@ import express from 'express';
 import { addItemToCart, getCart, removeItemFromCart } from '../controllers/cart.controller.js';
 import { cartValidator } from '../validators/cart.validator.js';
 import { validate } from '../middlewares/validate.middleware.js';
-// import { protect } from '../middlewares/auth.middleware.js'; // To be added when auth is integrated
+import { protect } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
@@ -62,8 +62,8 @@ const router = express.Router();
  *         description: Item removed and cart updated
  */
 
-// Apply auth middleware when available
-// router.use(protect);
+// Apply auth middleware
+router.use(protect);
 
 router
   .route('/')

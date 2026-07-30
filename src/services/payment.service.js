@@ -1,4 +1,5 @@
 export const mockPaymentService = {
+  // eslint-disable-next-line no-unused-vars
   processPayment: async (amount, currency = 'USD') => {
     // Simulate a network request to a payment gateway
     return new Promise((resolve) => {

@@ -2,7 +2,7 @@ import express from 'express';
 import { createOrder, getMyOrders, updateOrderStatus } from '../controllers/order.controller.js';
 import { orderValidator } from '../validators/order.validator.js';
 import { validate } from '../middlewares/validate.middleware.js';
-// import { protect, admin } from '../middlewares/auth.middleware.js'; // To be added when auth is integrated
+import { protect, admin } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
@@ -72,7 +72,7 @@ const router = express.Router();
  *         description: Order status updated
  */
 
-// router.use(protect);
+router.use(protect);
 
 router
   .route('/')
@@ -81,7 +81,6 @@ router
 
 router
   .route('/:id')
-  // .patch(admin, orderValidator.updateStatus, validate, updateOrderStatus);
-  .patch(orderValidator.updateStatus, validate, updateOrderStatus);
+  .patch(admin, orderValidator.updateStatus, validate, updateOrderStatus);
 
 export default router;

@@ -1,13 +1,18 @@
 import Cart from '../models/cart.js';
-import asyncHandler from '../utils/asyncHandler.js'; // Assuming this utility exists
+import Product from '../models/product.js';
+import asyncHandler from '../utils/asyncHandler.js';
 
 // @desc    Add item to cart
 // @route   POST /api/cart
 // @access  Private
 export const addItemToCart = asyncHandler(async (req, res) => {
   const { productId, quantity } = req.body;
-  // Use mock user ID if req.user is not set by auth middleware yet
-  const userId = req.user ? req.user._id : '64f0b2f9e4b0e5a1b4c9e8d1'; 
+  const userId = req.user._id;
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
 
   let cart = await Cart.findOne({ user: userId });
 
@@ -41,9 +46,8 @@ export const addItemToCart = asyncHandler(async (req, res) => {
 // @route   GET /api/cart
 // @access  Private
 export const getCart = asyncHandler(async (req, res) => {
-  const userId = req.user ? req.user._id : '64f0b2f9e4b0e5a1b4c9e8d1';
-  // TODO: Populate 'product' when the Product model is fully integrated.
-  const cart = await Cart.findOne({ user: userId }); 
+  const userId = req.user._id;
+  const cart = await Cart.findOne({ user: userId }).populate('items.product'); 
 
   if (!cart) {
     return res.status(404).json({ message: 'Cart not found' });
@@ -56,7 +60,7 @@ export const getCart = asyncHandler(async (req, res) => {
 // @route   DELETE /api/cart/:productId
 // @access  Private
 export const removeItemFromCart = asyncHandler(async (req, res) => {
-  const userId = req.user ? req.user._id : '64f0b2f9e4b0e5a1b4c9e8d1';
+  const userId = req.user._id;
   const productId = req.params.productId;
 
   const cart = await Cart.findOne({ user: userId });
