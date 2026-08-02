@@ -7,10 +7,25 @@ A robust Node.js backend for an Ecommerce application, providing RESTful APIs fo
 - **Runtime:** [Node.js](https://nodejs.org/)
 - **Framework:** [Express.js](https://expressjs.com/)
 - **Database:** [MongoDB](https://www.mongodb.com/) via [Mongoose](https://mongoosejs.com/)
-- **Documentation:** [Swagger UI](https://swagger.io/)
+- **Authentication:** [JWT (JSON Web Tokens)](https://jwt.io/) & [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- **Documentation:** [Swagger UI (OpenAPI 3.0)](https://swagger.io/)
 - **Testing:** [Jest](https://jestjs.io/) & [Supertest](https://github.com/ladjs/supertest)
 - **Code Quality:** [ESLint](https://eslint.org/) & [Prettier](https://prettier.io/)
-- **Media Storage:** [Cloudinary](https://cloudinary.com/)
+- **Media Storage:** [Cloudinary](https://cloudinary.com/) with [Multer](https://www.npmjs.com/package/multer)
+- **Emails:** [Nodemailer](https://nodemailer.com/) (Ethereal Mock Transport)
+
+---
+
+## ✨ Features & Modules
+
+The application is built using a decoupled Controller-Service-Route architecture and features **Role-Based Access Control (RBAC)** across three tiers: `Customer`, `Vendor`, and `Admin`.
+
+### Core Modules:
+- **Authentication & Users:** Secure Registration, Login, Logout, and Password Resets using JWT. Profile management and Admin controls over the user base.
+- **Products & Categories:** Full inventory CRUD operations, advanced search/filtering/pagination, and Cloudinary multi-image uploads. Restricted to Vendors and Admins.
+- **Shopping Cart:** Add items, remove items, and manage item quantities dynamically.
+- **Orders & Payments:** Secure checkout process and simulated payment routing for Paystack/Stripe integration.
+- **Reviews & Wishlists:** Users can review products (which automatically recalculates the product's average rating in MongoDB) and manage their personal wishlists.
 
 ---
 
